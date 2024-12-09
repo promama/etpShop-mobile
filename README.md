@@ -1,5 +1,5 @@
-# Các bước để khởi chạy app của người dùng:
 # LƯU Ý: MÁY TÍNH VÀ ĐIỆN THOẠI ĐỀU CẦN KẾT NỐI CHUNG 1 MẠNG ĐỂ CÓ THỂ CHẠY THÀNH CÔNG.
+# Các bước để khởi chạy app của người dùng:
 Bước 1: Tải các file trong đường dẫn "etpShop-mobile" về trong 1 folder. \
 Bước 2: Tải phiên bản nodejs mới nhất( tối thiểu v16.13.2). Link tải nodejs: https://nodejs.org/en/download/. \
 Bước 3: Gõ "npm install" và ấn enter. \
