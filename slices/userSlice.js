@@ -224,6 +224,8 @@ const userSlice = createSlice({
       state.dob = "";
       state.addresses = [];
       state.allowAccess = false;
+      state.unreadNotify = 0;
+      state.notificationList = [];
     },
     setOrderAddress: (state, action) => {
       state.addressInfos = action.payload.addressInfos;
