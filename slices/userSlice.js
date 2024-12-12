@@ -27,12 +27,36 @@ const initialState = {
 
 //render address
 const base_url = "https://e-tpshop-backend.onrender.com";
+// const base_url = "http://192.168.100.23:5000";
+
+export const fetchReadNofication = createAsyncThunk(
+  "user/fetchReadNofication",
+  async (userInfos, { rejectWithValue }) => {
+    try {
+      const res = await axios.request({
+        headers: {
+          Authorization: `Bearer ${userInfos.access_token}`,
+        },
+        data: { email: userInfos.email, notiId: userInfos.notiId },
+        method: "POST",
+        // url: `http://${ip_address}:5000/user/verify`,
+        url: `${base_url}/user/readNotify`,
+      });
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
 
 export const fetchUnreadNotification = createAsyncThunk(
   "/user/fetchUnreadNotification",
   async (data, { rejectWithValue }) => {
     try {
       const res = await axios.request({
+        headers: {
+          Authorization: `Bearer ${data.access_token}`,
+        },
         method: "POST",
         url: `${base_url}/user/notification`,
         data: data,
@@ -146,6 +170,7 @@ export const fetchGetAllAddress = createAsyncThunk(
           Authorization: `Bearer ${token.access_token}`,
         },
         method: "POST",
+        data: { email: token.email },
         // url: `http://${ip_address}:5000/user/getAllAddress`,
         url: `${base_url}/user/getAllAddress`,
       });
@@ -165,6 +190,7 @@ export const fetchVerify = createAsyncThunk(
           Authorization: `Bearer ${token.access_token}`,
         },
         method: "POST",
+        data: { email: token.email },
         // url: `http://${ip_address}:5000/user/verify`,
         url: `${base_url}/user/verify`,
       });
@@ -386,11 +412,27 @@ const userSlice = createSlice({
       state.message = action.payload.message;
       state.isLoading = false;
     });
+
     //receive unread notification
     builder.addCase(fetchUnreadNotification.fulfilled, (state, action) => {
       state.status = "success";
       state.notificationList = action.payload.listNotification;
       state.unreadNotify = action.payload.unreadNoti;
+    });
+
+    //read notification
+    builder.addCase(fetchReadNofication.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(fetchReadNofication.fulfilled, (state, action) => {
+      state.token = action.payload.token;
+      state.notificationList = action.payload.listNotification;
+      state.unreadNotify = action.payload.unreadNoti;
+      state.isLoading = false;
+    });
+    builder.addCase(fetchReadNofication.rejected, (state, action) => {
+      state.status = "fail";
+      state.isLoading = false;
     });
   },
 });

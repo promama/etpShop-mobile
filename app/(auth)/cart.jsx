@@ -22,11 +22,12 @@ function cart() {
   const amount = useSelector((state) => state.cart.cartTotalAmount);
   const addressInfos = useSelector((state) => state.user.addressInfos);
   const isLoading = useSelector((state) => state.user.isLoading);
+  const email = useSelector((state) => state.user.email);
 
   useEffect(() => {
     try {
-      dispatch(showCartItemsFetch({ access_token: token }));
-      dispatch(fetchGetAllAddress({ access_token: token }));
+      dispatch(showCartItemsFetch({ access_token: token, email }));
+      dispatch(fetchGetAllAddress({ access_token: token, email }));
     } catch (err) {
       if (err?.message === "signin again") {
         dispatch(reset());
@@ -39,7 +40,12 @@ function cart() {
       alert("confirm");
       //socket confirm order
       const res = await dispatch(
-        fetchConfirmAndBuy({ orderId, addressInfos, access_token: token })
+        fetchConfirmAndBuy({
+          orderId,
+          addressInfos,
+          access_token: token,
+          email,
+        })
       ).unwrap();
       alert(res.message);
       dispatch(dropCart());

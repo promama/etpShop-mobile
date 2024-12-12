@@ -40,6 +40,7 @@ function detailPage() {
   const stock = useSelector((state) => state.products.choosenQuantity);
   const choosenSize = useSelector((state) => state.products.choosenSize);
   const token = useSelector((state) => state.user.token);
+  const email = useSelector((state) => state.user.email);
 
   const [choosenColor, setChoosenColor] = useState(color);
   // const [choosenSize, setChoosenSize] = useState(0);
@@ -151,6 +152,7 @@ function detailPage() {
           size: choosenSize,
           quantity: buyingQuantity,
           access_token: token,
+          email,
         })
       ).unwrap();
       alert(res.message);

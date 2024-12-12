@@ -13,13 +13,14 @@ function purchases() {
   const listStatusCount = useSelector((state) => state.cart.listStatusCount);
   const isLoading = useSelector((state) => state.cart.isLoading);
   const token = useSelector((state) => state.user.token);
+  const email = useSelector((state) => state.user.email);
 
   const [showing, setShowing] = useState([1, 0, 0, 0, 0]); //default show all
   const [showPurchasesType, setShowPurchasesType] = useState("");
 
   useEffect(() => {
     try {
-      dispatch(showAllOrder({ access_token: token })).unwrap();
+      dispatch(showAllOrder({ access_token: token, email })).unwrap();
     } catch (err) {
       if (err.message === "signin again") {
         dispatch(reset());

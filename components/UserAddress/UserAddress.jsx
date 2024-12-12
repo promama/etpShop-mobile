@@ -15,6 +15,7 @@ function UserAddress() {
   const addresses = useSelector((state) => state.user.addresses);
   const message = useSelector((state) => state.user.message);
   const token = useSelector((state) => state.user.token);
+  const email = useSelector((state) => state.user.email);
 
   const [addNewAddress, setAddNewAddress] = useState(false);
   const [name, setName] = useState("");
@@ -23,7 +24,7 @@ function UserAddress() {
 
   useEffect(() => {
     try {
-      dispatch(fetchGetAllAddress({ access_token: token }));
+      dispatch(fetchGetAllAddress({ access_token: token, email }));
     } catch (err) {
       alert(message);
       if (message === "signin again") {
@@ -42,6 +43,7 @@ function UserAddress() {
           phoneNumber,
           address,
           access_token: token,
+          email,
         })
       ).unwrap();
       alert(res.message);

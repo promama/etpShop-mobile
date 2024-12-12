@@ -10,6 +10,7 @@ import { fetchRatingProduct } from "../../slices/cartSlice";
 function SingleOrder(props) {
   const isLoading = useSelector((state) => state.user.isLoading);
   const token = useSelector((state) => state.user.token);
+  const email = useSelector((state) => state.user.email);
   const dispatch = useDispatch();
 
   const [value, setValue] = useState(parseInt(props.product.rating) || 0);
@@ -24,6 +25,7 @@ function SingleOrder(props) {
           productId: props.product.productId,
           rating: value,
           access_token: token,
+          email,
         })
       ).unwrap();
       alert("Rating success");

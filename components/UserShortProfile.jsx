@@ -102,6 +102,7 @@ function UserShortProfile() {
             "/" +
             dateOfBirth.split("/")[2],
           access_token: token,
+          email,
         })
       ).unwrap();
       setEnableEdit("none");
@@ -151,7 +152,7 @@ function UserShortProfile() {
             key={email}
             items={genderData}
             value={genderValue}
-            placeholder={{ value: genderValue }}
+            placeholder={{ label: genderValue }}
             onValueChange={(value) => {
               setGenderValue(value);
             }}

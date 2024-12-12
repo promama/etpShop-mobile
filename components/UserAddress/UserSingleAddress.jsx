@@ -20,6 +20,7 @@ function UserSingleAddress(props) {
   const dispatch = useDispatch();
 
   const token = useSelector((state) => state.user.token);
+  const email = useSelector((state) => state.user.email);
 
   const [enableEdit, setEnableEdit] = useState(false);
   const [name, setName] = useState(props.name);
@@ -36,6 +37,7 @@ function UserSingleAddress(props) {
           address,
           addressId: props.id,
           access_token: token,
+          email,
         })
       ).unwrap();
       alert(res.message);
@@ -183,6 +185,7 @@ function UserSingleAddress(props) {
                         fetchUserSetDefaultAddress({
                           _id: props.id,
                           access_token: token,
+                          email,
                         })
                       );
                     },
@@ -211,6 +214,7 @@ function UserSingleAddress(props) {
                         fetchUserDeleteAddress({
                           _id: props.id,
                           access_token: token,
+                          email,
                         })
                       );
                     },

@@ -9,10 +9,11 @@ export default function DetailsLayout() {
   const allowAccess = useSelector((state) => state.user.allowAccess);
   const message = useSelector((state) => state.user.message);
   const token = useSelector((state) => state.user.token);
+  const email = useSelector((state) => state.user.email);
 
   useEffect(() => {
     try {
-      dispatch(fetchVerify({ access_token: token }));
+      dispatch(fetchVerify({ access_token: token, email }));
     } catch (err) {
       dispatch(reset());
     }
