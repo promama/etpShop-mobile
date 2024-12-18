@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   Pressable,
@@ -176,21 +176,25 @@ function UserSingleAddress(props) {
               className="border p-2 mr-2"
               style={styles.btn_default}
               onPress={() =>
-                Alert.alert("Set this address as default?", props.id, [
-                  { text: "Cancel" },
-                  {
-                    text: "Confirm",
-                    onPress: async () => {
-                      dispatch(
-                        fetchUserSetDefaultAddress({
-                          _id: props.id,
-                          access_token: token,
-                          email,
-                        })
-                      );
+                Alert.alert(
+                  "Set this address as default?",
+                  name + " - " + phoneNumber + " - " + address,
+                  [
+                    { text: "Cancel" },
+                    {
+                      text: "Confirm",
+                      onPress: async () => {
+                        dispatch(
+                          fetchUserSetDefaultAddress({
+                            _id: props.id,
+                            access_token: token,
+                            email,
+                          })
+                        );
+                      },
                     },
-                  },
-                ])
+                  ]
+                )
               }
             >
               <Text style={{ color: "purple" }}>Set default</Text>
@@ -205,21 +209,25 @@ function UserSingleAddress(props) {
               className="border p-2"
               style={styles.btn_delete}
               onPress={() =>
-                Alert.alert("Delete this address?", props.id, [
-                  { text: "Cancel" },
-                  {
-                    text: "Delete",
-                    onPress: async () => {
-                      dispatch(
-                        fetchUserDeleteAddress({
-                          _id: props.id,
-                          access_token: token,
-                          email,
-                        })
-                      );
+                Alert.alert(
+                  "Delete this address?",
+                  name + " - " + phoneNumber + " - " + address,
+                  [
+                    { text: "Cancel" },
+                    {
+                      text: "Delete",
+                      onPress: async () => {
+                        dispatch(
+                          fetchUserDeleteAddress({
+                            _id: props.id,
+                            access_token: token,
+                            email,
+                          })
+                        );
+                      },
                     },
-                  },
-                ])
+                  ]
+                )
               }
             >
               <Text style={{ color: "orange" }}>Delete</Text>

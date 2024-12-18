@@ -22,8 +22,27 @@ const initialState = {
 //const ip_address = "192.168.184.142";
 
 //render address
-const base_url = "https://e-tpshop-backend.onrender.com";
-// const base_url = "http://192.168.100.23:5000";
+// const base_url = "https://e-tpshop-backend.onrender.com";
+const base_url = "http://192.168.184.142:5000";
+
+export const subtractToCartFetch = createAsyncThunk(
+  "cart/subtractToCartFetch",
+  async (productInfos, { rejectWithValue }) => {
+    try {
+      const res = await axios.request({
+        headers: {
+          Authorization: `Bearer ${productInfos.access_token}`,
+        },
+        method: "POST",
+        url: `${base_url}/cart/subtractToCart`,
+        data: { ...productInfos },
+      });
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
 
 export const addToCartFetch = createAsyncThunk(
   "cart/addToCartFetch",
@@ -185,6 +204,25 @@ const cartSlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(addToCartFetch.rejected, (state, action) => {
+      state.status = "fail";
+      state.message = action.payload.message;
+      state.isLoading = false;
+    });
+
+    //add item to cart
+    builder.addCase(subtractToCartFetch.pending, (state, action) => {
+      state.isLoading = true;
+    });
+    builder.addCase(subtractToCartFetch.fulfilled, (state, action) => {
+      state.status = "success";
+      state.message = "subtract to cart successfully";
+      state.cartItems = action.payload.cart;
+      state.cartTotalAmount = action.payload.total;
+      state.cartTotalQuantities = action.payload.quantity;
+      state.orderId = action.payload.orderId;
+      state.isLoading = false;
+    });
+    builder.addCase(subtractToCartFetch.rejected, (state, action) => {
       state.status = "fail";
       state.message = action.payload.message;
       state.isLoading = false;

@@ -169,20 +169,23 @@ function detailPage() {
   useEffect(() => {
     dispatch(productFetch(params));
     dispatch(productColorFetch(params));
+    setChoosenColor(color);
     dispatch(createSizesData(color));
     setSizeData(rawSizeData);
   }, [dispatch, color]);
 
   return (
     <ScrollView>
-      <Pressable
+      {/* <Pressable
         onPress={() => {
           alert(JSON.stringify(productColors));
         }}
       >
         <Text>checking</Text>
-      </Pressable>
-
+      </Pressable> */}
+      <Text>
+        {product.brand} {">"} {product.category} {">"} {product.name}
+      </Text>
       {/* View main image and 4 images below */}
       {productColors?.map((product) => {
         return (
@@ -240,7 +243,6 @@ function detailPage() {
           )
         );
       })}
-
       {/* Choose color of product  */}
       <View style={styles.color_container}>
         <View className="flex flex-row">
@@ -269,19 +271,16 @@ function detailPage() {
           })}
         </View>
       </View>
-
       {/* Choose size of color */}
       <View>
         <View style={styles.horizontal_ruler} />
         <MyPickerSelect sizeData={sizeData} />
         <View style={styles.horizontal_ruler} />
       </View>
-
       {/* View price of size  */}
       <View>
         <Text className="font-bold text-red-500 text-lg">Price: ${price}</Text>
       </View>
-
       {/* Choose quantity to buy */}
       <View>
         <Text className="text-gray-400">Stock: {stock}</Text>
@@ -315,7 +314,6 @@ function detailPage() {
           Total: ${buyingQuantity * price}
         </Text>
       </View>
-
       {/* Button add product to cart */}
       <View>
         <Pressable
@@ -331,13 +329,11 @@ function detailPage() {
           <Text style={{ color: "white" }}>Add to cart</Text>
         </Pressable>
       </View>
-
       {/* View product description */}
       <View>
         <Text>Description: {product.description}</Text>
       </View>
-
-      {/* Testing area */}
+      {/* Testing area
       <Button
         title="go back to Home page"
         onPress={() => router.push("/")}
@@ -345,7 +341,7 @@ function detailPage() {
       <Text>Detail page {params.id}</Text>
       <Text>current Color {choosenColor}</Text>
       <Text>current size: {choosenSize}</Text>
-      <Text>Buying quantity: {buyingQuantity}</Text>
+      <Text>Buying quantity: {buyingQuantity}</Text> */}
     </ScrollView>
   );
 }

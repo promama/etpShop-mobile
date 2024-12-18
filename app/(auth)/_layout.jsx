@@ -15,6 +15,7 @@ export default function DetailsLayout() {
     try {
       dispatch(fetchVerify({ access_token: token, email }));
     } catch (err) {
+      alert(err.message);
       dispatch(reset());
     }
   }, [dispatch]);

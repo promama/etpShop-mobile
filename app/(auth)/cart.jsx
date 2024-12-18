@@ -69,20 +69,6 @@ function cart() {
     <View style={{ flex: 1 }}>
       <ScrollView className="mt-10 ml-5 mr-5">
         <Text>cart page</Text>
-        <Pressable
-          onPress={() => {
-            dispatch(reset());
-            dispatch(dropCart());
-          }}
-        >
-          <Text>log out</Text>
-        </Pressable>
-
-        {/* Cart id */}
-        <View className="flex-row mb-2">
-          <Text>Cart id:</Text>
-          <Text className="ml-auto">{orderId}</Text>
-        </View>
 
         <View className="mb-2">
           <CartListAddress></CartListAddress>

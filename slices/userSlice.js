@@ -26,8 +26,8 @@ const initialState = {
 //const ip_address = "192.168.184.142";
 
 //render address
-const base_url = "https://e-tpshop-backend.onrender.com";
-// const base_url = "http://192.168.100.23:5000";
+// const base_url = "https://e-tpshop-backend.onrender.com";
+const base_url = "http://192.168.184.142:5000";
 
 export const fetchReadNofication = createAsyncThunk(
   "user/fetchReadNofication",
@@ -97,6 +97,7 @@ export const fetchUserDeleteAddress = createAsyncThunk(
         },
         method: "DELETE",
         url: `${base_url}/user/deleteUserAddressById/${addressId._id}`,
+        data: addressId,
       });
       return res.data;
     } catch (err) {
@@ -134,6 +135,7 @@ export const fetchUserSetDefaultAddress = createAsyncThunk(
         },
         method: "POST",
         url: `${base_url}/user/setUserDefaultAddress/${addressId._id}`,
+        data: addressId,
       });
       return res.data;
     } catch (err) {
@@ -152,6 +154,25 @@ export const fetchChangeUserProfile = createAsyncThunk(
         },
         method: "POST",
         url: `${base_url}/user/editUserProfile`,
+        data: { ...userProfile },
+      });
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const fetchUserShortProfile = createAsyncThunk(
+  "user/fetchUserShortProfile",
+  async (userProfile, { rejectWithValue }) => {
+    try {
+      const res = await axios.request({
+        headers: {
+          Authorization: `Bearer ${userProfile.access_token}`,
+        },
+        method: "POST",
+        url: `${base_url}/user/showUserShortProfile`,
         data: { ...userProfile },
       });
       return res.data;
@@ -325,6 +346,21 @@ const userSlice = createSlice({
     builder.addCase(fetchGetAllAddress.rejected, (state, action) => {
       state.status = "fail";
       state.message = action.payload.message;
+    });
+
+    //get all user addresses
+    builder.addCase(fetchUserShortProfile.fulfilled, (state, action) => {
+      state.status = "success";
+      state.message = action.payload.message;
+      state.dob = action.payload.data.birthDay;
+      state.gender = action.payload.data.sex;
+      state.phoneNumber = action.payload.data.phoneNumber;
+      state.token = action.payload.token;
+      state.token = action.payload.token;
+    });
+    builder.addCase(fetchUserShortProfile.rejected, (state, action) => {
+      state.status = "fail";
+      state.message = action.payload?.message;
     });
 
     //change user profile

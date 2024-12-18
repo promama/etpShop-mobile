@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Platform, Pressable, StyleSheet, Text, TextInput } from "react-native";
 import { View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import RNPickerSelect from "react-native-picker-select";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { fetchChangeUserProfile, reset } from "../slices/userSlice";
+import {
+  fetchChangeUserProfile,
+  fetchUserShortProfile,
+  reset,
+} from "../slices/userSlice";
 import { router } from "expo-router";
 
 function UserShortProfile() {
@@ -116,6 +120,18 @@ function UserShortProfile() {
     }
   };
 
+  useEffect(() => {
+    try {
+      dispatch(fetchUserShortProfile({ email }));
+    } catch (err) {
+      alert(err.message);
+      if (err.message === "signin again") {
+        dispatch(reset());
+        router.push("/signin");
+      }
+    }
+  }, [dispatch]);
+
   return (
     <View>
       {/* Profile detail */}
@@ -177,7 +193,7 @@ function UserShortProfile() {
 
         {!showPicker && (
           <Pressable className="ml-auto" onPress={toggleDatePicker}>
-            <TextInput editable={false}>{dateOfBirth}</TextInput>
+            <TextInput editable={false} value={dateOfBirth}></TextInput>
           </Pressable>
         )}
       </View>

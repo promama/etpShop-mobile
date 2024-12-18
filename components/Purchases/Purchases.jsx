@@ -8,8 +8,6 @@ function Purchases(props) {
     <View className="mt-3">
       {/* Purchases infos */}
       <View className="flex-row mb-2">
-        {/* Purchases Id */}
-        <Text>Id: {props.orders.orderId}</Text>
         {/* Purchases status */}
         <Text
           className="ml-auto"
@@ -23,7 +21,7 @@ function Purchases(props) {
         props.orders.productInOrder.map((product) => {
           return (
             <View className="mb-3" key={product._id + product.orderId}>
-              <SingleOrder product={product} />
+              <SingleOrder product={product} cancel={props.orders.status} />
             </View>
           );
         })}

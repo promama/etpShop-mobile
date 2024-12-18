@@ -75,23 +75,27 @@ function SingleOrder(props) {
       <View className="mt-2">
         {props.product?.status === "Finish" &&
           (!isLoading ? (
-            <>
-              <View pointerEvents={props.product.allowRating ? "auto" : "none"}>
-                <StarRating
-                  rating={value}
-                  onChange={setValue}
-                  enableHalfStar={false}
-                />
-              </View>
-              {props.product.allowRating && (
-                <Pressable
-                  className="border p-2 mt-1 mr-auto rounded-lg border-blue-800"
-                  onPress={() => handleRatingProduct()}
+            props.cancel != "Cancelled" && (
+              <>
+                <View
+                  pointerEvents={props.product.allowRating ? "auto" : "none"}
                 >
-                  <Text className="text-blue-800">Submit rating</Text>
-                </Pressable>
-              )}
-            </>
+                  <StarRating
+                    rating={value}
+                    onChange={setValue}
+                    enableHalfStar={false}
+                  />
+                </View>
+                {props.product.allowRating && (
+                  <Pressable
+                    className="border p-2 mt-1 mr-auto rounded-lg border-blue-800"
+                    onPress={() => handleRatingProduct()}
+                  >
+                    <Text className="text-blue-800">Submit rating</Text>
+                  </Pressable>
+                )}
+              </>
+            )
           ) : (
             <Text>Loading...</Text>
           ))}

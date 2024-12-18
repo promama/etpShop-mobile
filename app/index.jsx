@@ -55,22 +55,6 @@ function index() {
   return (
     <View className="bg-blue-100 flex-1">
       <Text className="mt-10">Home page</Text>
-      {/* <Pressable className="mb-3" onPress={() => reset()}>
-        <Text>reset user infos</Text>
-      </Pressable> */}
-      {/* <Pressable className="mb-3">
-        <TextInput
-          onSubmitEditing={() => {
-            submitSendMessage();
-          }}
-          autoCorrect={false}
-          autoCapitalize="none"
-          value={chatMessage}
-          onChangeText={(value) => setChatMessage(value)}
-        ></TextInput>
-      </Pressable>
-      <Text>response: {responseMessage}</Text> */}
-
       {/* Search bar */}
       <TextInput
         onChangeText={(e) => setQuery(e)}
@@ -79,12 +63,6 @@ function index() {
 
       {/* Show all products */}
       {!isLoading ? (
-        // filteredProduct?.map((product) => {
-        //   console.log(product.name);
-        //   return (
-        //     <ItemCard key={product.name} productInfos={product}></ItemCard>
-        //   );
-        // })
         <FlatList
           className="flex flex-col"
           data={filteredProduct}
@@ -95,10 +73,6 @@ function index() {
       ) : (
         <Text>Loading...</Text>
       )}
-
-      <Pressable className="mt-3" onPress={() => router.push("signin")}>
-        <Text>Go to sign in page</Text>
-      </Pressable>
     </View>
   );
 }

@@ -25,8 +25,8 @@ const initialState = {
 //const ip_address = "192.168.184.142";
 
 //render address
-const base_url = "https://e-tpshop-backend.onrender.com";
-// const base_url = "http://192.168.100.23:5000";
+// const base_url = "https://e-tpshop-backend.onrender.com";
+const base_url = "http://192.168.184.142:5000";
 
 export const allProductsFetch = createAsyncThunk(
   "products/allProductsFetch",

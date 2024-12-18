@@ -46,14 +46,6 @@ function purchases() {
         <Pressable onPress={() => alert(listStatusCount[0])}>
           <Text>show listStatus</Text>
         </Pressable>
-        <Pressable
-          onPress={() => {
-            dispatch(reset());
-            dispatch(dropCart());
-          }}
-        >
-          <Text>log out</Text>
-        </Pressable>
         {/* Create horizontial scroll for purchases type */}
         <ScrollView
           className="flex mt-2"
@@ -99,7 +91,7 @@ function purchases() {
               style={showing[3] ? styles.show_order : styles.order}
               onPress={() => {
                 handleChangeShowCartType(3);
-                setShowPurchasesType("Cancel");
+                setShowPurchasesType("Cancelled");
               }}
             >
               Cancel ({listStatusCount[3]})
