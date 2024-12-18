@@ -100,7 +100,7 @@ function MyNavBar() {
         >
           <Text className="text-white items-center">{unreadNotify}</Text>
         </View>
-        <Text>Cart</Text>
+        <Text>Notify</Text>
       </Pressable>
       {/* Nav Purchases */}
       <Pressable

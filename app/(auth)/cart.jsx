@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import {
   fetchConfirmAndBuy,
   fetchGetAllAddress,
@@ -21,7 +28,8 @@ function cart() {
   const cartItem = useSelector((state) => state.cart.cartItems);
   const amount = useSelector((state) => state.cart.cartTotalAmount);
   const addressInfos = useSelector((state) => state.user.addressInfos);
-  const isLoading = useSelector((state) => state.user.isLoading);
+  const isUserLoading = useSelector((state) => state.user.isLoading);
+  const isCartLoading = useSelector((state) => state.cart.isLoading);
   const email = useSelector((state) => state.user.email);
 
   useEffect(() => {
@@ -37,8 +45,6 @@ function cart() {
 
   const handleConfirmAndBuy = async () => {
     try {
-      alert("confirm");
-      //socket confirm order
       const res = await dispatch(
         fetchConfirmAndBuy({
           orderId,
@@ -68,15 +74,11 @@ function cart() {
   return (
     <View style={{ flex: 1 }}>
       <ScrollView className="mt-10 ml-5 mr-5">
-        <Text>cart page</Text>
+        <Text style={{ fontSize: 23, color: "blue" }}>cart page</Text>
 
         <View className="mb-2">
           <CartListAddress></CartListAddress>
         </View>
-        {/* 
-        <Pressable onPress={() => alert(JSON.stringify(addressInfos))}>
-          <Text>Show address Infos</Text>
-        </Pressable> */}
 
         {/* Show list cart */}
         <View>
@@ -95,7 +97,7 @@ function cart() {
           </View>
         </View>
         <View className="ml-auto mt-2">
-          {!isLoading ? (
+          {!isUserLoading ? (
             <Pressable
               className="border p-2"
               style={styles.btn_save}
@@ -104,7 +106,7 @@ function cart() {
               <Text style={{ color: "blue" }}>Confirm & Buy</Text>
             </Pressable>
           ) : (
-            <Text>Loading...</Text>
+            <ActivityIndicator size="large" color="blue" />
           )}
         </View>
       </ScrollView>

@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import ProductImage from "../ProductImage";
 import { currencyFormat } from "../../utils/formatCurrency";
@@ -14,11 +20,12 @@ function SingleOrder(props) {
   const dispatch = useDispatch();
 
   const [value, setValue] = useState(parseInt(props.product.rating) || 0);
+  const [ratingLoading, setRatingLoading] = useState(false);
 
   // Rate product stars
   const handleRatingProduct = async () => {
     try {
-      alert("rating");
+      setRatingLoading(true);
       await dispatch(
         fetchRatingProduct({
           _id: props.product._id,
@@ -28,6 +35,7 @@ function SingleOrder(props) {
           email,
         })
       ).unwrap();
+      setRatingLoading(false);
       alert("Rating success");
     } catch (err) {
       alert(err.message);
@@ -97,7 +105,7 @@ function SingleOrder(props) {
               </>
             )
           ) : (
-            <Text>Loading...</Text>
+            <ActivityIndicator size="large" color="blue" />
           ))}
       </View>
     </View>

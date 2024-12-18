@@ -23,7 +23,8 @@ const initialState = {
 
 //render address
 // const base_url = "https://e-tpshop-backend.onrender.com";
-const base_url = "http://192.168.184.142:5000";
+// const base_url = "http://192.168.184.142:5000";
+const base_url = "http://192.168.100.13:5000";
 
 export const subtractToCartFetch = createAsyncThunk(
   "cart/subtractToCartFetch",
@@ -150,14 +151,19 @@ const cartSlice = createSlice({
   },
   extraReducers: (builder) => {
     //show item in cart
+    builder.addCase(showCartItemsFetch.pending, (state, action) => {
+      state.isLoading = true;
+    });
     builder.addCase(showCartItemsFetch.fulfilled, (state, action) => {
       state.status = "success";
       state.cartItems = action.payload.cart;
       state.cartTotalAmount = action.payload.total;
       state.cartTotalQuantities = action.payload.quantity;
+      state.isLoading = false;
     });
     builder.addCase(showCartItemsFetch.rejected, (state, action) => {
       state.status = "fail";
+      state.isLoading = false;
     });
 
     //show all orders

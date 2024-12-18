@@ -1,5 +1,6 @@
 import { router, useLocalSearchParams } from "expo-router";
 import {
+  ActivityIndicator,
   Button,
   Image,
   Pressable,
@@ -29,6 +30,7 @@ function detailPage() {
   const dispatch = useDispatch();
 
   const isLoading = useSelector((state) => state.products.isLoading);
+  const isCartLoading = useSelector((state) => state.cart.isLoading);
   const product = useSelector((state) => state.products.singleItem);
   const productColors = useSelector((state) => state.products.item_Props);
   const productSizes = useSelector((state) => state.products.productSizes);
@@ -176,172 +178,170 @@ function detailPage() {
 
   return (
     <ScrollView>
-      {/* <Pressable
-        onPress={() => {
-          alert(JSON.stringify(productColors));
-        }}
-      >
-        <Text>checking</Text>
-      </Pressable> */}
-      <Text>
-        {product.brand} {">"} {product.category} {">"} {product.name}
-      </Text>
-      {/* View main image and 4 images below */}
-      {productColors?.map((product) => {
-        return (
-          isMatchColor(product.productColor) && (
-            <View key={product.url}>
-              <View style={styles.container}>
-                <ProductImage url={displayMainImage(product.url)} />
-              </View>
-              <View
-                className="flex flex-row"
-                style={styles.small_image_container}
-              >
+      {isLoading ? (
+        <ActivityIndicator size="large" color="blue" />
+      ) : (
+        <View>
+          <Text>
+            {product.brand} {">"} {product.category} {">"} {product.name}
+          </Text>
+          {/* Main image and 4 images below */}
+          {productColors?.map((product) => {
+            return (
+              isMatchColor(product.productColor) && (
+                <View key={product.url}>
+                  <View style={styles.container}>
+                    <ProductImage url={displayMainImage(product.url)} />
+                  </View>
+                  <View
+                    className="flex flex-row"
+                    style={styles.small_image_container}
+                  >
+                    <Pressable
+                      onPress={() => {
+                        setMainImage(subImage0);
+                      }}
+                    >
+                      <ProductImage
+                        style={styles.small_image}
+                        url={subImage0 ? subImage0 : product.url}
+                      />
+                    </Pressable>
+                    <Pressable
+                      onPress={() => {
+                        setMainImage(subImage1);
+                      }}
+                    >
+                      <ProductImage
+                        style={styles.small_image}
+                        url={subImage1 ? subImage1 : product.url1}
+                      />
+                    </Pressable>
+                    <Pressable
+                      onPress={() => {
+                        setMainImage(subImage2);
+                      }}
+                    >
+                      <ProductImage
+                        style={styles.small_image}
+                        url={subImage2 ? subImage2 : product.url2}
+                      />
+                    </Pressable>
+                    <Pressable
+                      onPress={() => {
+                        setMainImage(subImage3);
+                      }}
+                    >
+                      <ProductImage
+                        style={styles.small_image}
+                        url={subImage3 ? subImage3 : product.url3}
+                      />
+                    </Pressable>
+                  </View>
+                </View>
+              )
+            );
+          })}
+          {/* Choose color of product  */}
+          <View style={styles.color_container}>
+            <View className="flex flex-row">
+              {productColors?.map((color) => {
+                return (
+                  <Pressable
+                    key={color.productColor + color._id}
+                    style={{
+                      width: 50,
+                      height: 50,
+                      margin: 5,
+                      backgroundColor: color.productColor
+                        .toString()
+                        .toLowerCase(),
+                    }}
+                    onPress={() => {
+                      setMainImage(color.url);
+                      setSubImage0(color.url);
+                      setSubImage1(color.url1);
+                      setSubImage2(color.url2);
+                      setSubImage3(color.url3);
+                      dispatch(createSizesData(color.productColor));
+                      setChoosenColor(color.productColor);
+                      dispatch(changeSize(0));
+                    }}
+                  ></Pressable>
+                );
+              })}
+            </View>
+          </View>
+          {/* Choose size of color */}
+          <View>
+            <View style={styles.horizontal_ruler} />
+            <MyPickerSelect sizeData={sizeData} />
+            <View style={styles.horizontal_ruler} />
+          </View>
+          {/* View price of size  */}
+          <View>
+            <Text className="font-bold text-red-500 text-lg">
+              Price: ${price}
+            </Text>
+          </View>
+          {/* Choose quantity to buy */}
+          <View>
+            <Text className="text-gray-400">Stock: {stock}</Text>
+            <View className="flex-row items-center">
+              <Text>quantity</Text>
+              <View className="flex-row ml-auto pl-5 pr-5 content-evenly items-center">
                 <Pressable
-                  onPress={() => {
-                    setMainImage(subImage0);
-                  }}
+                  className="pl-3 pr-3"
+                  style={{ borderRadius: 5 }}
+                  onPress={() => handleSubtractQuantity()}
                 >
-                  <ProductImage
-                    style={styles.small_image}
-                    url={subImage0 ? subImage0 : product.url}
-                  />
+                  <Text className="text-lg font-bold">-</Text>
                 </Pressable>
-                <Pressable
-                  onPress={() => {
-                    setMainImage(subImage1);
-                  }}
+                <TextInput
+                  className="ml-3"
+                  onChangeText={(e) => handleSetBuyingQuantity(e)}
+                  inputMode="decimal"
                 >
-                  <ProductImage
-                    style={styles.small_image}
-                    url={subImage1 ? subImage1 : product.url1}
-                  />
-                </Pressable>
+                  {buyingQuantity || 1}
+                </TextInput>
                 <Pressable
-                  onPress={() => {
-                    setMainImage(subImage2);
-                  }}
+                  className="pl-3 pr-3"
+                  style={{ borderRadius: 5 }}
+                  onPress={() => handleAddQuantity(stock)}
                 >
-                  <ProductImage
-                    style={styles.small_image}
-                    url={subImage2 ? subImage2 : product.url2}
-                  />
-                </Pressable>
-                <Pressable
-                  onPress={() => {
-                    setMainImage(subImage3);
-                  }}
-                >
-                  <ProductImage
-                    style={styles.small_image}
-                    url={subImage3 ? subImage3 : product.url3}
-                  />
+                  <Text className="text-lg font-bold">+</Text>
                 </Pressable>
               </View>
             </View>
-          )
-        );
-      })}
-      {/* Choose color of product  */}
-      <View style={styles.color_container}>
-        <View className="flex flex-row">
-          {productColors?.map((color) => {
-            return (
+            <Text className="ml-auto mr-3 mt-3 font-bold text-lg">
+              Total: ${buyingQuantity * price}
+            </Text>
+          </View>
+          {/* Button add product to cart */}
+          {isCartLoading ? (
+            <ActivityIndicator color="blue" size="large" />
+          ) : (
+            <View>
               <Pressable
-                key={color.productColor + color._id}
+                className="border p-2 mb-2 bg-blue-500"
                 style={{
-                  width: 50,
-                  height: 50,
-                  margin: 5,
-                  backgroundColor: color.productColor.toString().toLowerCase(),
+                  alignSelf: "center",
+                  marginTop: 10,
+                  borderRadius: 10,
+                  borderColor: "yellow",
                 }}
-                onPress={() => {
-                  setMainImage(color.url);
-                  setSubImage0(color.url);
-                  setSubImage1(color.url1);
-                  setSubImage2(color.url2);
-                  setSubImage3(color.url3);
-                  dispatch(createSizesData(color.productColor));
-                  setChoosenColor(color.productColor);
-                  dispatch(changeSize(0));
-                }}
-              ></Pressable>
-            );
-          })}
-        </View>
-      </View>
-      {/* Choose size of color */}
-      <View>
-        <View style={styles.horizontal_ruler} />
-        <MyPickerSelect sizeData={sizeData} />
-        <View style={styles.horizontal_ruler} />
-      </View>
-      {/* View price of size  */}
-      <View>
-        <Text className="font-bold text-red-500 text-lg">Price: ${price}</Text>
-      </View>
-      {/* Choose quantity to buy */}
-      <View>
-        <Text className="text-gray-400">Stock: {stock}</Text>
-        <View className="flex-row items-center">
-          <Text>quantity</Text>
-          <View className="flex-row ml-auto pl-5 pr-5 content-evenly items-center">
-            <Pressable
-              className="pl-3 pr-3"
-              style={{ borderRadius: 5 }}
-              onPress={() => handleSubtractQuantity()}
-            >
-              <Text className="text-lg font-bold">-</Text>
-            </Pressable>
-            <TextInput
-              className="ml-3"
-              onChangeText={(e) => handleSetBuyingQuantity(e)}
-              inputMode="decimal"
-            >
-              {buyingQuantity || 1}
-            </TextInput>
-            <Pressable
-              className="pl-3 pr-3"
-              style={{ borderRadius: 5 }}
-              onPress={() => handleAddQuantity(stock)}
-            >
-              <Text className="text-lg font-bold">+</Text>
-            </Pressable>
+                onPress={addToCart}
+              >
+                <Text style={{ color: "white" }}>Add to cart</Text>
+              </Pressable>
+            </View>
+          )}
+          {/* View product description */}
+          <View>
+            <Text>Description: {product.description}</Text>
           </View>
         </View>
-        <Text className="ml-auto mr-3 mt-3 font-bold text-lg">
-          Total: ${buyingQuantity * price}
-        </Text>
-      </View>
-      {/* Button add product to cart */}
-      <View>
-        <Pressable
-          className="border p-2 mb-2 bg-blue-500"
-          style={{
-            alignSelf: "center",
-            marginTop: 10,
-            borderRadius: 10,
-            borderColor: "yellow",
-          }}
-          onPress={addToCart}
-        >
-          <Text style={{ color: "white" }}>Add to cart</Text>
-        </Pressable>
-      </View>
-      {/* View product description */}
-      <View>
-        <Text>Description: {product.description}</Text>
-      </View>
-      {/* Testing area
-      <Button
-        title="go back to Home page"
-        onPress={() => router.push("/")}
-      ></Button>
-      <Text>Detail page {params.id}</Text>
-      <Text>current Color {choosenColor}</Text>
-      <Text>current size: {choosenSize}</Text>
-      <Text>Buying quantity: {buyingQuantity}</Text> */}
+      )}
     </ScrollView>
   );
 }

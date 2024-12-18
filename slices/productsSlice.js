@@ -26,7 +26,8 @@ const initialState = {
 
 //render address
 // const base_url = "https://e-tpshop-backend.onrender.com";
-const base_url = "http://192.168.184.142:5000";
+// const base_url = "http://192.168.184.142:5000";
+const base_url = "http://192.168.100.13:5000";
 
 export const allProductsFetch = createAsyncThunk(
   "products/allProductsFetch",
@@ -123,6 +124,9 @@ const productsSlice = createSlice({
     });
 
     //Get product details
+    builder.addCase(productFetch.pending, (state, action) => {
+      state.isLoading = true;
+    });
     builder.addCase(productFetch.fulfilled, (state, action) => {
       state.status = "success";
       state.singleItem = action.payload.product[0];
@@ -131,10 +135,15 @@ const productsSlice = createSlice({
     });
 
     //Get product images by color
+    builder.addCase(productColorFetch.pending, (state, action) => {
+      state.isLoading = true;
+    });
+
     builder.addCase(productColorFetch.fulfilled, (state, action) => {
       state.status = "success";
       state.item_Props = action.payload.color;
       state.productSizes = action.payload.size;
+      state.isLoading = false;
     });
   },
 });

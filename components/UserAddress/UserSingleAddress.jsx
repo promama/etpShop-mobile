@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Alert,
   Pressable,
   StyleSheet,
@@ -21,6 +22,7 @@ function UserSingleAddress(props) {
 
   const token = useSelector((state) => state.user.token);
   const email = useSelector((state) => state.user.email);
+  const isLoading = useSelector((state) => state.user.isLoading);
 
   const [enableEdit, setEnableEdit] = useState(false);
   const [name, setName] = useState(props.name);
@@ -91,29 +93,35 @@ function UserSingleAddress(props) {
           </Text>
           {/* Buttons */}
           {enableEdit ? (
-            <View className="flex-row">
-              {/* Button cancel */}
-              <Pressable
-                className="border p-2 mr-2"
-                style={styles.btn_cancel}
-                onPress={() => {
-                  setEnableEdit(!enableEdit);
-                  setName(props.name);
-                  setPhonenumber(props.phoneNumber);
-                  setAddress(props.address);
-                }}
-              >
-                <Text style={{ color: "red" }}>Cancel</Text>
-              </Pressable>
-              {/* button save update*/}
-              <Pressable
-                className="border p-2 mr-2"
-                style={styles.btn_save}
-                onPress={handleAddNewAddress}
-              >
-                <Text style={{ color: "blue" }}>Save change</Text>
-              </Pressable>
-            </View>
+            isLoading ? (
+              <ActivityIndicator />
+            ) : (
+              <View className="flex-row">
+                {/* Button cancel */}
+                <Pressable
+                  className="border p-2 mr-2"
+                  style={styles.btn_cancel}
+                  onPress={() => {
+                    setEnableEdit(!enableEdit);
+                    setName(props.name);
+                    setPhonenumber(props.phoneNumber);
+                    setAddress(props.address);
+                  }}
+                >
+                  <Text style={{ color: "red" }}>Cancel</Text>
+                </Pressable>
+                {/* button save update*/}
+                <Pressable
+                  className="border p-2 mr-2"
+                  style={styles.btn_save}
+                  onPress={handleAddNewAddress}
+                >
+                  <Text style={{ color: "blue" }}>Save change</Text>
+                </Pressable>
+              </View>
+            )
+          ) : isLoading ? (
+            <ActivityIndicator />
           ) : (
             // Button update
             <Pressable
@@ -132,29 +140,35 @@ function UserSingleAddress(props) {
         <View className="flex-row">
           {/* Buttons */}
           {enableEdit ? (
-            <View className="flex-row">
-              {/* Button cancel */}
-              <Pressable
-                className="border p-2 mr-2"
-                style={styles.btn_cancel}
-                onPress={() => {
-                  setEnableEdit(!enableEdit);
-                  setName(props.name);
-                  setPhonenumber(props.phoneNumber);
-                  setAddress(props.address);
-                }}
-              >
-                <Text style={{ color: "red" }}>Cancel</Text>
-              </Pressable>
-              {/* Button save edit */}
-              <Pressable
-                className="border p-2 mr-2"
-                style={styles.btn_save}
-                onPress={handleAddNewAddress}
-              >
-                <Text style={{ color: "blue" }}>Save change</Text>
-              </Pressable>
-            </View>
+            isLoading ? (
+              <ActivityIndicator />
+            ) : (
+              <View className="flex-row">
+                {/* Button cancel */}
+                <Pressable
+                  className="border p-2 mr-2"
+                  style={styles.btn_cancel}
+                  onPress={() => {
+                    setEnableEdit(!enableEdit);
+                    setName(props.name);
+                    setPhonenumber(props.phoneNumber);
+                    setAddress(props.address);
+                  }}
+                >
+                  <Text style={{ color: "red" }}>Cancel</Text>
+                </Pressable>
+                {/* Button save edit */}
+                <Pressable
+                  className="border p-2 mr-2"
+                  style={styles.btn_save}
+                  onPress={handleAddNewAddress}
+                >
+                  <Text style={{ color: "blue" }}>Save change</Text>
+                </Pressable>
+              </View>
+            )
+          ) : isLoading ? (
+            <ActivityIndicator />
           ) : (
             // Button update
             <Pressable
@@ -170,69 +184,75 @@ function UserSingleAddress(props) {
 
           {/* hide wnen editing */}
           {/* button set default address */}
-          {!enableEdit && (
-            // Button set address as default
-            <Pressable
-              className="border p-2 mr-2"
-              style={styles.btn_default}
-              onPress={() =>
-                Alert.alert(
-                  "Set this address as default?",
-                  name + " - " + phoneNumber + " - " + address,
-                  [
-                    { text: "Cancel" },
-                    {
-                      text: "Confirm",
-                      onPress: async () => {
-                        dispatch(
-                          fetchUserSetDefaultAddress({
-                            _id: props.id,
-                            access_token: token,
-                            email,
-                          })
-                        );
+          {!enableEdit &&
+            (isLoading ? (
+              <ActivityIndicator />
+            ) : (
+              // Button set address as default
+              <Pressable
+                className="border p-2 mr-2"
+                style={styles.btn_default}
+                onPress={() =>
+                  Alert.alert(
+                    "Set this address as default?",
+                    name + " - " + phoneNumber + " - " + address,
+                    [
+                      { text: "Cancel" },
+                      {
+                        text: "Confirm",
+                        onPress: async () => {
+                          dispatch(
+                            fetchUserSetDefaultAddress({
+                              _id: props.id,
+                              access_token: token,
+                              email,
+                            })
+                          );
+                        },
                       },
-                    },
-                  ]
-                )
-              }
-            >
-              <Text style={{ color: "purple" }}>Set default</Text>
-            </Pressable>
-          )}
+                    ]
+                  )
+                }
+              >
+                <Text style={{ color: "purple" }}>Set default</Text>
+              </Pressable>
+            ))}
 
           {/* hide when editing */}
           {/* button delete address */}
-          {!enableEdit && (
-            // Button delete address
-            <Pressable
-              className="border p-2"
-              style={styles.btn_delete}
-              onPress={() =>
-                Alert.alert(
-                  "Delete this address?",
-                  name + " - " + phoneNumber + " - " + address,
-                  [
-                    { text: "Cancel" },
-                    {
-                      text: "Delete",
-                      onPress: async () => {
-                        dispatch(
-                          fetchUserDeleteAddress({
-                            _id: props.id,
-                            access_token: token,
-                            email,
-                          })
-                        );
+          {!enableEdit &&
+            (isLoading ? (
+              <ActivityIndicator />
+            ) : (
+              // Button delete address
+              <Pressable
+                className="border p-2"
+                style={styles.btn_delete}
+                onPress={() =>
+                  Alert.alert(
+                    "Delete this address?",
+                    name + " - " + phoneNumber + " - " + address,
+                    [
+                      { text: "Cancel" },
+                      {
+                        text: "Delete",
+                        onPress: async () => {
+                          dispatch(
+                            fetchUserDeleteAddress({
+                              _id: props.id,
+                              access_token: token,
+                              email,
+                            })
+                          );
+                        },
                       },
-                    },
-                  ]
-                )
-              }
-            >
-              <Text style={{ color: "orange" }}>Delete</Text>
-            </Pressable>
-          )}
+                    ]
+                  )
+                }
+              >
+                <Text style={{ color: "orange" }}>Delete</Text>
+              </Pressable>
+            ))}
         </View>
       )}
       <View style={styles.horizontal_ruler}></View>

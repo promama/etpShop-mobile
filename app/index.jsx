@@ -1,6 +1,13 @@
 import { Link, router, Stack } from "expo-router";
 import { useEffect, useMemo, useState } from "react";
-import { Button, FlatList, Image, Pressable, TextInput } from "react-native";
+import {
+  ActivityIndicator,
+  Button,
+  FlatList,
+  Image,
+  Pressable,
+  TextInput,
+} from "react-native";
 import { Text, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { allProductsFetch } from "../slices/productsSlice";
@@ -54,7 +61,9 @@ function index() {
 
   return (
     <View className="bg-blue-100 flex-1">
-      <Text className="mt-10">Home page</Text>
+      <Text className="mt-10 mb-2 ml-2" style={{ fontSize: 23, color: "blue" }}>
+        Home page
+      </Text>
       {/* Search bar */}
       <TextInput
         onChangeText={(e) => setQuery(e)}
@@ -71,7 +80,7 @@ function index() {
           numColumns={2}
         ></FlatList>
       ) : (
-        <Text>Loading...</Text>
+        <ActivityIndicator size="large" color="blue"></ActivityIndicator>
       )}
     </View>
   );

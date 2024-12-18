@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Platform, Pressable, StyleSheet, Text, TextInput } from "react-native";
+import {
+  ActivityIndicator,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+} from "react-native";
 import { View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import RNPickerSelect from "react-native-picker-select";
@@ -134,103 +141,112 @@ function UserShortProfile() {
 
   return (
     <View>
-      {/* Profile detail */}
-      <Text style={styles.header}>My profile:</Text>
-      {/* Profile email UNCHANGEABLE */}
-      <View className="flex-row mt-2" pointerEvents={enableEdit}>
-        <Text>Email:</Text>
-        <TextInput className="ml-auto" editable={false}>
-          {email}
-        </TextInput>
-      </View>
-      <View style={styles.horizontal_ruler}></View>
-      {/* Phone number */}
-      <View className="flex-row  mt-2" pointerEvents={enableEdit}>
-        <Text>Phone number:</Text>
-        <TextInput
-          className="ml-auto"
-          keyboardType="phone-pad"
-          editable={enableEdit == "none" ? false : true}
-          onChangeText={(value) => {
-            setNumber(value);
-          }}
-        >
-          {number}
-        </TextInput>
-      </View>
-      <View style={styles.horizontal_ruler}></View>
-      {/* Gender */}
-      <View className="flex-row items-center mt-2" pointerEvents={enableEdit}>
-        <Text>Gender:</Text>
-        <View className="ml-auto w-36">
-          {/* react native picker select */}
-          <RNPickerSelect
-            key={email}
-            items={genderData}
-            value={genderValue}
-            placeholder={{ label: genderValue }}
-            onValueChange={(value) => {
-              setGenderValue(value);
-            }}
-          ></RNPickerSelect>
-        </View>
-      </View>
-      <View style={styles.horizontal_ruler}></View>
-      {/* Date of birth */}
-      <View className="flex-row  mt-2" pointerEvents={enableEdit}>
-        <Text>Date of birth:</Text>
-        {/* Date picker */}
-        {showPicker && (
-          <DateTimePicker
-            mode="date"
-            display="spinner"
-            value={date}
-            onChange={onChange}
-            maximumDate={new Date("2010-12-31")}
-            minimumDate={new Date("1900-1-1")}
-          />
-        )}
-
-        {!showPicker && (
-          <Pressable className="ml-auto" onPress={toggleDatePicker}>
-            <TextInput editable={false} value={dateOfBirth}></TextInput>
-          </Pressable>
-        )}
-      </View>
-      <View style={styles.horizontal_ruler}></View>
-      {/* Buttons */}
-      {enableEdit == "none" ? (
-        // Button edit
-        <View>
-          <Pressable
-            className="border p-2 mr-2"
-            style={styles.btn_update}
-            onPress={() => handleUpdateProfile()}
-          >
-            <Text style={{ color: "green" }}>Update</Text>
-          </Pressable>
-        </View>
+      {isLoading ? (
+        <ActivityIndicator />
       ) : (
-        <View className="flex-row">
-          {/* Button cancel */}
-          <Pressable
-            className="border p-2 mr-2"
-            style={styles.btn_cancel}
-            onPress={() => {
-              handleUpdateProfile();
-              setDateOfBirth(dob);
-            }}
+        <View>
+          {/* Profile detail */}
+          <Text style={styles.header}>My profile:</Text>
+          {/* Profile email UNCHANGEABLE */}
+          <View className="flex-row mt-2" pointerEvents={enableEdit}>
+            <Text>Email:</Text>
+            <TextInput className="ml-auto" editable={false}>
+              {email}
+            </TextInput>
+          </View>
+          <View style={styles.horizontal_ruler}></View>
+          {/* Phone number */}
+          <View className="flex-row  mt-2" pointerEvents={enableEdit}>
+            <Text>Phone number:</Text>
+            <TextInput
+              className="ml-auto"
+              keyboardType="phone-pad"
+              editable={enableEdit == "none" ? false : true}
+              onChangeText={(value) => {
+                setNumber(value);
+              }}
+            >
+              {number}
+            </TextInput>
+          </View>
+          <View style={styles.horizontal_ruler}></View>
+          {/* Gender */}
+          <View
+            className="flex-row items-center mt-2"
+            pointerEvents={enableEdit}
           >
-            <Text style={{ color: "red" }}>Cancel</Text>
-          </Pressable>
-          {/* Button Save */}
-          <Pressable
-            className="border p-2 mr-2"
-            style={styles.btn_save}
-            onPress={() => handleSubmit()}
-          >
-            <Text style={{ color: "blue" }}>Save change</Text>
-          </Pressable>
+            <Text>Gender:</Text>
+            <View className="ml-auto w-36">
+              {/* react native picker select */}
+              <RNPickerSelect
+                key={email}
+                items={genderData}
+                value={genderValue}
+                placeholder={{ label: genderValue }}
+                onValueChange={(value) => {
+                  setGenderValue(value);
+                }}
+              ></RNPickerSelect>
+            </View>
+          </View>
+          <View style={styles.horizontal_ruler}></View>
+          {/* Date of birth */}
+          <View className="flex-row  mt-2" pointerEvents={enableEdit}>
+            <Text>Date of birth:</Text>
+            {/* Date picker */}
+            {showPicker && (
+              <DateTimePicker
+                mode="date"
+                display="spinner"
+                value={date}
+                onChange={onChange}
+                maximumDate={new Date("2010-12-31")}
+                minimumDate={new Date("1900-1-1")}
+              />
+            )}
+
+            {!showPicker && (
+              <Pressable className="ml-auto" onPress={toggleDatePicker}>
+                <TextInput editable={false} value={dateOfBirth}></TextInput>
+              </Pressable>
+            )}
+          </View>
+          <View style={styles.horizontal_ruler}></View>
+          {/* Buttons */}
+          {enableEdit == "none" ? (
+            // Button edit
+            <View>
+              <Pressable
+                className="border p-2 mr-2"
+                style={styles.btn_update}
+                onPress={() => handleUpdateProfile()}
+              >
+                <Text style={{ color: "green" }}>Update</Text>
+              </Pressable>
+            </View>
+          ) : (
+            <View className="flex-row">
+              {/* Button cancel */}
+              <Pressable
+                className="border p-2 mr-2"
+                style={styles.btn_cancel}
+                onPress={() => {
+                  handleUpdateProfile();
+                  setDateOfBirth(dob);
+                }}
+              >
+                <Text style={{ color: "red" }}>Cancel</Text>
+              </Pressable>
+              {/* Button Save */}
+              <Pressable
+                className="border p-2 mr-2"
+                style={styles.btn_save}
+                onPress={() => handleSubmit()}
+              >
+                <Text style={{ color: "blue" }}>Save change</Text>
+              </Pressable>
+            </View>
+          )}
         </View>
       )}
     </View>

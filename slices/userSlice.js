@@ -27,7 +27,8 @@ const initialState = {
 
 //render address
 // const base_url = "https://e-tpshop-backend.onrender.com";
-const base_url = "http://192.168.184.142:5000";
+// const base_url = "http://192.168.184.142:5000";
+const base_url = "http://192.168.100.13:5000";
 
 export const fetchReadNofication = createAsyncThunk(
   "user/fetchReadNofication",
@@ -338,17 +339,25 @@ const userSlice = createSlice({
     });
 
     //get all user addresses
+    builder.addCase(fetchGetAllAddress.pending, (state, action) => {
+      state.isLoading = true;
+    });
     builder.addCase(fetchGetAllAddress.fulfilled, (state, action) => {
       state.status = "success";
       state.addresses = action.payload.address;
       state.token = action.payload.token;
+      state.isLoading = false;
     });
     builder.addCase(fetchGetAllAddress.rejected, (state, action) => {
       state.status = "fail";
       state.message = action.payload.message;
+      state.isLoading = false;
     });
 
     //get all user addresses
+    builder.addCase(fetchUserShortProfile.pending, (state, action) => {
+      state.isLoading = true;
+    });
     builder.addCase(fetchUserShortProfile.fulfilled, (state, action) => {
       state.status = "success";
       state.message = action.payload.message;
@@ -357,10 +366,12 @@ const userSlice = createSlice({
       state.phoneNumber = action.payload.data.phoneNumber;
       state.token = action.payload.token;
       state.token = action.payload.token;
+      state.isLoading = false;
     });
     builder.addCase(fetchUserShortProfile.rejected, (state, action) => {
       state.status = "fail";
       state.message = action.payload?.message;
+      state.isLoading = false;
     });
 
     //change user profile
@@ -450,10 +461,18 @@ const userSlice = createSlice({
     });
 
     //receive unread notification
+    builder.addCase(fetchUnreadNotification.pending, (state, action) => {
+      state.isLoading = true;
+    });
     builder.addCase(fetchUnreadNotification.fulfilled, (state, action) => {
       state.status = "success";
       state.notificationList = action.payload.listNotification;
       state.unreadNotify = action.payload.unreadNoti;
+      state.isLoading = false;
+    });
+    builder.addCase(fetchUnreadNotification.rejected, (state, action) => {
+      state.status = "fail";
+      state.isLoading = false;
     });
 
     //read notification

@@ -2,6 +2,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { React, useState } from "react";
 import {
+  ActivityIndicator,
   Button,
   Pressable,
   StyleSheet,
@@ -9,11 +10,12 @@ import {
   TextInput,
   View,
 } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchSignUp } from "../slices/userSlice";
 
 function signup() {
   const dispatch = useDispatch();
+  const isLoading = useSelector((state) => state.user.isLoading);
 
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -73,11 +75,15 @@ function signup() {
               }}
             />
           </View>
-          <Button
-            style={styles.btn_signin}
-            title="Sign up"
-            onPress={handleSubmit}
-          ></Button>
+          {isLoading ? (
+            <ActivityIndicator />
+          ) : (
+            <Button
+              style={styles.btn_signin}
+              title="Sign up"
+              onPress={handleSubmit}
+            ></Button>
+          )}
           <Pressable>
             <Text
               style={styles.forgot_password}

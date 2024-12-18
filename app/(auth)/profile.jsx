@@ -11,7 +11,7 @@ function profile() {
   return (
     <View style={{ flex: 1 }}>
       <ScrollView className="mt-10 ml-5 mr-5">
-        <Text>profile page</Text>
+        <Text style={{ fontSize: 23, color: "blue" }}>My profile page</Text>
         <Pressable
           onPress={() => {
             dispatch(reset());

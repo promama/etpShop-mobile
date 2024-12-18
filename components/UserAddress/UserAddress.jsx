@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchAddNewAddress,
@@ -16,6 +23,7 @@ function UserAddress() {
   const message = useSelector((state) => state.user.message);
   const token = useSelector((state) => state.user.token);
   const email = useSelector((state) => state.user.email);
+  const isLoading = useSelector((state) => state.user.isLoading);
 
   const [addNewAddress, setAddNewAddress] = useState(false);
   const [name, setName] = useState("");
@@ -60,7 +68,10 @@ function UserAddress() {
     <View className="mt-5">
       <Text style={styles.header}>My address:</Text>
       <View style={styles.horizontal_ruler}></View>
-      {addresses &&
+      {isLoading ? (
+        <ActivityIndicator />
+      ) : (
+        addresses &&
         addresses?.map((address) => {
           return (
             <View
@@ -82,7 +93,8 @@ function UserAddress() {
               />
             </View>
           );
-        })}
+        })
+      )}
       <View>
         {addNewAddress ? (
           <View>
@@ -125,26 +137,30 @@ function UserAddress() {
               </TextInput>
             </View>
             {/* Buttons */}
-            <View className="flex-row mt-1 flex justify-center">
-              {/* Discard create */}
-              <Pressable
-                className="border p-2 mr-2"
-                style={styles.btn_cancel}
-                onPress={() => {
-                  setAddNewAddress(!addNewAddress);
-                }}
-              >
-                <Text style={{ color: "red" }}>Discard</Text>
-              </Pressable>
-              {/* Create address */}
-              <Pressable
-                className="border p-2"
-                style={styles.btn_save}
-                onPress={handleAddNewAddress}
-              >
-                <Text style={{ color: "blue" }}>Create</Text>
-              </Pressable>
-            </View>
+            {isLoading ? (
+              <ActivityIndicator />
+            ) : (
+              <View className="flex-row mt-1 flex justify-center">
+                {/* Discard create */}
+                <Pressable
+                  className="border p-2 mr-2"
+                  style={styles.btn_cancel}
+                  onPress={() => {
+                    setAddNewAddress(!addNewAddress);
+                  }}
+                >
+                  <Text style={{ color: "red" }}>Discard</Text>
+                </Pressable>
+                {/* Create address */}
+                <Pressable
+                  className="border p-2"
+                  style={styles.btn_save}
+                  onPress={handleAddNewAddress}
+                >
+                  <Text style={{ color: "blue" }}>Create</Text>
+                </Pressable>
+              </View>
+            )}
           </View>
         ) : (
           // Button show form address to create

@@ -1,5 +1,5 @@
 import React from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { ActivityIndicator, Pressable, StyleSheet, View } from "react-native";
 import { Text } from "react-native";
 import ProductImage from "../ProductImage";
 import formatCurrency, { currencyFormat } from "../../utils/formatCurrency";
@@ -144,7 +144,7 @@ function CartItem(props) {
           </View>
         </View>
       ) : (
-        <Text>Loading...!</Text>
+        <ActivityIndicator color="blue" size="large" />
       )}
       {/* Total amount of item */}
       <Text className="ml-auto">
